@@ -6,6 +6,9 @@
 #
 # By Ky9oss
 
+REDSOCKS_PORT=12345
+REDIRECT_USER=root
+
 if [ "$(id -u)" -ne 0 ]; then
     printf "ERROR: %s\n" "$0"
     echo "Permission denied: Run this scirpt in sudo"
@@ -37,9 +40,10 @@ if [ "$action" = on ]; then
         iptables -t nat -A REDSOCKS -d 224.0.0.0/4 -j RETURN
         iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
 
-        iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 12345
+        iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports $REDSOCKS_PORT
 
-        iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner $SUDO_USER -j REDSOCKS
+        # iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner $SUDO_USER -j REDSOCKS
+        iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner $REDIRECT_USER -j REDSOCKS
 
         # groupadd redsocks 2>/dev/null
         # usermod --append --groups redsocks $SUDO_USER 2>/dev/null
@@ -54,7 +58,8 @@ if [ "$action" = on ]; then
     fi
 elif [ "$action" = off ]; then
     iptables -t nat -F REDSOCKS
-    iptables -t nat -D OUTPUT -p tcp -m owner --uid-owner $SUDO_USER -j REDSOCKS
+    # iptables -t nat -D OUTPUT -p tcp -m owner --uid-owner $SUDO_USER -j REDSOCKS
+    iptables -t nat -D OUTPUT -p tcp -m owner --uid-owner $REDIRECT_USER -j REDSOCKS
     # iptables -t nat -D OUTPUT -p tcp -m owner --gid-owner redsocks -j REDSOCKS
 
     # iptables -L REDSOCKS -t nat
