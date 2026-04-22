@@ -11,4 +11,6 @@
     <br>
 </div>
 
-This is a kernel-level transparent proxy solution.
+This is a transparent TCP-to-proxy redirector. It's used to replace proxychains when `LD_PRELOAD` can not hijack the network of software, such as some software written in Go which does not even depend on `libc`.
+
+It's a redirector rather than proxy. If you want some proxies in various protocal, then try 9proxy: [https://github.com/Ky9oss/9proxy]
