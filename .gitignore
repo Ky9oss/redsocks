@@ -4,6 +4,7 @@ tags
 redsocks
 .depend
 /gen
+*/gen
 
 # SpectorVim files
 *~
