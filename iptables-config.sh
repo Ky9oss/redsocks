@@ -1,7 +1,6 @@
 #!/bin/bash
 #
-# Configure iptables rules for current user.
-# This is used for redsocks.
+# Enable Linux kernel REDIRECT rule by iptables for tranparent proxy
 # $1: on | off
 #
 # By Ky9oss
