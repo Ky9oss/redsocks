@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Dubug with tcpdump
+# $1: socks ip
 #
 # By Ky9oss
 
@@ -13,6 +14,7 @@ fi
 PCAP_FILE="capture.pcap"
 
 tcpdump -i 1 ip proto 6 -w "$PCAP_FILE" &
+# tcpdump -i 1 host docker.io -w "$PCAP_FILE" &
 
 # $! only used for background process
 pid=$!
@@ -24,7 +26,9 @@ kill $pid
 # -vvv   Even more verbose output.
 # -XX    print the data of each packet in hex and ASCII.
 # -tttt  Print a human-readable timestamp
-tcpdump -r "$PCAP_FILE" -vvv -XX -tttt
+# tcpdump -r "$PCAP_FILE" -vvv -XX -tttt
+
+tshark -r capture.pcap -Y "ip.addr == $1" -V
 
 # $ getent protocols
 # ip                    0 IP
